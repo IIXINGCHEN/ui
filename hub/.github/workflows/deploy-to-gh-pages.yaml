@@ -1,0 +1,39 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 设置触发部署的分支，可以根据实际情况修改为master或其他分支名
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 完整克隆，确保能获取所有历史记录
+
+      # 如果您的网站需要构建步骤，取消下面的注释并调整命令
+      # - name: Set up Node.js
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 16
+      #
+      # - name: Install dependencies
+      #   run: npm ci
+      #
+      # - name: Build website
+      #   run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: .  # 要部署的文件夹，当前为根目录，如果有构建步骤，可能需要修改为 'dist' 或 'build'
+          branch: gh-pages  # 部署的目标分支
+          clean: true  # 清理旧文件
+          token: ${{ secrets.GITHUB_TOKEN }}  # GitHub 自动提供的 token 
