@@ -1,0 +1,1070 @@
+/* 引入 Google 字体 Inter，用于页面文本 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* 定义根变量，方便主题切换使用 */
+:root {
+    --primary: #0066FF;
+    /* 主色调：蓝色 */
+    --primary-dark: #0052CC;
+    /* 深色主色调 */
+    --tech-blue: #00D1FF;
+    /* 技术蓝色 */
+    --tech-purple: #7B61FF;
+    /* 技术紫色 */
+}
+
+/* 亮色主题变量 */
+[data-theme="light"] {
+    --bg-color: #f8fafc;
+    /* 背景颜色：更浅更柔和 */
+    --text-color: #1e293b;
+    /* 主要文本颜色：更柔和的深色 */
+    --text-secondary: #334155;
+    /* 次要文本颜色：中等深度 */
+    --text-muted: #64748b;
+    /* 静音文本颜色：更柔和 */
+    --card-bg: rgba(255, 255, 255, 0.95);
+    /* 卡片背景颜色：增加不透明度 */
+    --card-bg-solid: #ffffff;
+    /* 卡片背景颜色（实色） */
+    --card-border: rgba(148, 163, 184, 0.2);
+    /* 卡片边框颜色：更淡 */
+    --border-color: #cbd5e1;
+    /* 边框颜色：更柔和 */
+    --card-shadow: rgba(15, 23, 42, 0.08);
+    /* 卡片阴影颜色：更柔和 */
+    --heading-color: #0f172a;
+    /* 标题颜色 */
+    --link-color: #2563eb;
+    /* 链接颜色：更鲜艳的蓝色 */
+    --link-hover: #1d4ed8;
+    /* 链接悬停颜色：深一点的蓝色 */
+    --code-bg: #f1f5f9;
+    /* 代码块背景颜色 */
+    --code-text: #1e293b;
+    /* 代码块文本颜色 */
+    --highlight-color: #3b82f6;
+    /* 高亮颜色 */
+    --highlight-bg: rgba(59, 130, 246, 0.1);
+    /* 高亮背景 */
+}
+
+/* 深色主题变量 */
+[data-theme="dark"] {
+    --bg-color: #0A0B0D;
+    /* 背景颜色 */
+    --text-color: #ffffff;
+    /* 主要文本颜色 */
+    --text-secondary: #e2e8f0;
+    /* 次要文本颜色 */
+    --text-muted: #94a3b8;
+    /* 静音文本颜色 */
+    --card-bg: rgba(15, 23, 42, 0.85);
+    /* 卡片背景颜色：增加不透明度 */
+    --card-bg-solid: #1e293b;
+    /* 卡片背景颜色（实色） */
+    --card-border: rgba(255, 255, 255, 0.1);
+    /* 卡片边框颜色 */
+    --border-color: rgba(255, 255, 255, 0.1);
+    /* 边框颜色 */
+    --card-shadow: rgba(0, 0, 0, 0.5);
+    /* 卡片阴影颜色 */
+    --heading-color: #ffffff;
+    /* 标题颜色 */
+    --link-color: #38bdf8;
+    /* 链接颜色 */
+    --link-hover: #7dd3fc;
+    /* 链接悬停颜色 */
+    --code-bg: #2d2d2d;
+    /* 代码块背景颜色 */
+    --code-text: #f8f8f2;
+    /* 代码块文本颜色 */
+}
+
+/* 全局 body 样式 */
+body {
+    font-family: 'Inter', sans-serif;
+    /* 设置字体为 Inter */
+    background-color: var(--bg-color);
+    /* 使用主题背景颜色 */
+    /* background-image: url('https://imgapi.cn/api.php?zz=zsy&fl=fengjing&gs=images'); */
+    /* background-image: url('https://api-hrandom-pic.imixc.top/?type=horizontal&raw=1'); */
+    /* 使用JS动态设置背景图片以避免缓存问题 */
+    background-size: cover;
+    /* 背景图片覆盖整个页面 */
+    background-position: center;
+    /* 背景图片居中 */
+    background-attachment: fixed;
+    /* 背景图片固定，不随滚动移动 */
+    color: var(--text-color);
+    /* 使用主题文本颜色 */
+    overflow-x: hidden;
+    /* 禁止水平溢出 */
+    transition: background-color 0.3s, color 0.3s;
+    /* 背景和文本颜色切换动画 */
+}
+
+/* 主题感知的文本颜色类 */
+.theme-text {
+    color: var(--text-color) !important;
+    /* 强制使用主题文本颜色 */
+}
+
+.theme-text-secondary {
+    color: var(--text-secondary) !important;
+    /* 强制使用主题次要文本颜色 */
+}
+
+.theme-heading {
+    color: var(--heading-color) !important;
+    /* 强制使用主题标题颜色 */
+}
+
+.theme-card {
+    background: var(--card-bg);
+    /* 使用主题卡片背景颜色 */
+    border: 1px solid var(--card-border);
+    /* 使用主题卡片边框颜色 */
+    box-shadow: 0 4px 12px var(--card-shadow);
+    /* 使用主题卡片阴影 */
+}
+
+.theme-card-solid {
+    background: var(--card-bg-solid);
+    /* 使用主题实色卡片背景 */
+    border: 1px solid var(--card-border);
+    /* 使用主题卡片边框颜色 */
+    box-shadow: 0 4px 12px var(--card-shadow);
+    /* 使用主题卡片阴影 */
+}
+
+.tech-gradient {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    /* 技术渐变背景（深色） */
+}
+
+[data-theme="light"] .tech-gradient {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    /* 技术渐变背景（亮色） */
+}
+
+.hero-gradient {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--tech-blue) 100%);
+    /* 英雄区域渐变背景 */
+}
+
+.card-glass {
+    background: var(--card-bg);
+    /* 使用主题卡片背景颜色 */
+    backdrop-filter: blur(15px);
+    /* 增强玻璃模糊效果 */
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08), 0 2px 5px rgba(15, 23, 42, 0.03);
+    /* 分层阴影效果，更加精致 */
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    /* 更淡的边框颜色 */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* 平滑过渡效果 */
+}
+
+/* 亮色主题下的玻璃卡片特殊处理 */
+[data-theme="light"] .card-glass {
+    background: var(--card-bg);
+    /* 使用主题卡片背景颜色 */
+    backdrop-filter: blur(15px);
+    /* 增强玻璃模糊效果 */
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08), 0 2px 5px rgba(15, 23, 42, 0.03);
+    /* 分层阴影效果，更加精致 */
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    /* 更淡的边框颜色 */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* 平滑过渡效果 */
+}
+
+/* 亮色主题下的玻璃卡片悬停效果 */
+[data-theme="light"] .card-glass:hover {
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1), 0 4px 8px rgba(15, 23, 42, 0.05);
+    /* 悬停时增强阴影效果 */
+    transform: translateY(-2px);
+    /* 轻微上移效果 */
+}
+
+/* 亮色主题下的实心卡片 */
+[data-theme="light"] .theme-card-solid {
+    background: var(--card-bg-solid);
+    /* 使用主题实色卡片背景 */
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    /* 更淡的边框颜色 */
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08), 0 2px 5px rgba(15, 23, 42, 0.03);
+    /* 分层阴影效果，更加精致 */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* 平滑过渡效果 */
+}
+
+/* 亮色主题下的实心卡片悬停效果 */
+[data-theme="light"] .theme-card-solid:hover {
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1), 0 4px 8px rgba(15, 23, 42, 0.05);
+    /* 悬停时增强阴影效果 */
+}
+
+.tech-icon {
+    animation: float 6s ease-in-out infinite;
+    /* 技术图标浮动动画 */
+}
+
+.pulse-icon {
+    animation: pulse 2s ease-in-out infinite;
+    /* 脉动动画 */
+}
+
+.glow {
+    box-shadow: 0 0 20px rgba(0, 209, 255, 0.3);
+    /* 发光效果 */
+}
+
+.glow:hover {
+    box-shadow: 0 0 30px rgba(0, 209, 255, 0.5);
+    /* 悬停时增强发光效果 */
+}
+
+.tech-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* 技术卡片平滑过渡效果 */
+    transform-style: preserve-3d;
+    /* 保留 3D 变换效果 */
+}
+
+.tech-card:hover {
+    transform: translateY(-10px) rotateX(5deg);
+    /* 悬停时向上移动并旋转 */
+    box-shadow: 0 25px 50px -12px rgba(0, 209, 255, 0.25);
+    /* 增强阴影效果 */
+}
+
+/* 代码块样式 */
+pre {
+    background: #2d2d2d;
+    /* 默认背景颜色（深色） */
+    color: #f8f8f2;
+    /* 文本颜色 */
+    padding: 30px 20px 20px 20px;
+    /* 内边距，顶部多留空间给装饰 */
+    border-radius: 8px;
+    /* 圆角 */
+    overflow-x: auto;
+    /* 水平溢出时滚动 */
+    position: relative;
+    /* 相对定位，用于伪元素 */
+    margin-bottom: 16px;
+    /* 底部间距 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* 阴影效果 */
+}
+
+/* 亮色主题下的代码块样式 */
+[data-theme="light"] pre {
+    background: #1e293b;
+    /* 背景颜色 - 深蓝灰色，确保文本清晰 */
+    color: #f8f8f2;
+    /* 文本颜色 - 保持浅色，便于阅读 */
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+    /* 阴影效果 */
+    border: 1px solid rgba(226, 232, 240, 0.4);
+    /* 添加边框，提高可见性 */
+}
+
+/* 为亮色模式下的代码添加行号装饰 */
+[data-theme="light"] pre:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 100%;
+    background: rgba(59, 130, 246, 0.3);
+    /* 左侧蓝色条纹 */
+}
+
+/* 代码块前的装饰（模拟窗口控制按钮） */
+pre::before {
+    content: " ";
+    /* 空内容，仅用于显示装饰 */
+    display: block;
+    /* 块级元素 */
+    position: absolute;
+    /* 绝对定位 */
+    top: 10px;
+    /* 顶部距离 */
+    left: 10px;
+    /* 左侧距离 */
+    width: 12px;
+    /* 圆点宽度 */
+    height: 12px;
+    /* 圆点高度 */
+    background: #ff5f56;
+    /* 红色圆点 */
+    border-radius: 50%;
+    /* 圆形 */
+    box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27c93f;
+    /* 黄色和绿色圆点 */
+}
+
+/* 代码文本样式 */
+code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    /* 代码字体 */
+    font-size: 0.875em;
+    /* 字体大小 */
+}
+
+/* 复制按钮样式 */
+.copy-button {
+    position: absolute;
+    /* 绝对定位 */
+    top: 10px;
+    /* 顶部距离 */
+    right: 10px;
+    /* 右侧距离 */
+    background: #007aff;
+    /* 背景颜色 */
+    color: white;
+    /* 文本颜色 */
+    border: none;
+    /* 无边框 */
+    padding: 5px 10px;
+    /* 内边距 */
+    border-radius: 5px;
+    /* 圆角 */
+    cursor: pointer;
+    /* 手型光标 */
+    opacity: 0;
+    /* 默认隐藏 */
+    transition: opacity 0.3s;
+    /* 透明度过渡动画 */
+}
+
+/* 代码块悬停时显示复制按钮 */
+pre:hover .copy-button {
+    opacity: 1;
+    /* 显示按钮 */
+}
+
+/* 电路图案背景 */
+.circuit-pattern {
+    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.1) 1px, transparent 0);
+    /* 径向渐变点图案 */
+    background-size: 20px 20px;
+    /* 图案大小 */
+}
+
+/* 浮动动画 */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    /* 初始位置 */
+    50% {
+        transform: translateY(-15px);
+    }
+
+    /* 中间向上移动 */
+    100% {
+        transform: translateY(0px);
+    }
+
+    /* 回到初始位置 */
+}
+
+/* 脉动动画 */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    /* 初始大小和透明度 */
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    /* 放大并降低透明度 */
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    /* 恢复初始状态 */
+}
+
+/* 虚线动画（未使用） */
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+
+    /* 虚线动画结束状态 */
+}
+
+/* 淡入动画 */
+.animate-fadeIn {
+    animation: fadeIn 0.8s ease-out forwards;
+    /* 淡入动画，持续 0.8 秒 */
+}
+
+/* 淡入动画定义 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    /* 初始状态：透明且向下偏移 */
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* 结束状态：不透明且恢复位置 */
+}
+
+/* 页面加载进度条样式 */
+#nprogress {
+    pointer-events: none;
+    /* 禁止鼠标交互 */
+}
+
+#nprogress .bar {
+    background: var(--primary);
+    /* 使用主题主色调 */
+    position: fixed;
+    /* 固定定位 */
+    z-index: 1031;
+    /* 高层级，确保在最上层 */
+    top: 0;
+    /* 顶部对齐 */
+    left: 0;
+    /* 左侧对齐 */
+    width: 100%;
+    /* 宽度 100% */
+    height: 2px;
+    /* 高度 2px */
+}
+
+#nprogress .peg {
+    display: block;
+    /* 显示块 */
+    position: absolute;
+    /* 绝对定位 */
+    right: 0px;
+    /* 右侧对齐 */
+    width: 100px;
+    /* 宽度 100px */
+    height: 100%;
+    /* 高度 100% */
+    box-shadow: 0 0 10px var(--primary), 0 0 5px var(--primary);
+    /* 发光效果 */
+    opacity: 0.6;
+    /* 透明度 */
+    transform: rotate(3deg) translate(0px, -4px);
+    /* 轻微旋转和偏移 */
+}
+
+#nprogress .spinner {
+    display: none;
+    /* 默认隐藏旋转图标 */
+}
+
+/* 返回顶部按钮样式 */
+.back-to-top {
+    position: fixed;
+    /* 固定定位 */
+    bottom: 2rem;
+    /* 底部距离 */
+    right: 2rem;
+    /* 右侧距离 */
+    width: 3rem;
+    /* 宽度 */
+    height: 3rem;
+    /* 高度 */
+    border-radius: 50%;
+    /* 圆形 */
+    display: flex;
+    /* 弹性布局 */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    background: linear-gradient(135deg, var(--primary) 0%, var(--tech-blue) 100%);
+    /* 渐变背景 */
+    color: white;
+    /* 文本颜色 */
+    cursor: pointer;
+    /* 手型光标 */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    /* 阴影效果 */
+    opacity: 0;
+    /* 默认隐藏 */
+    transform: translateY(20px);
+    /* 默认向下偏移 */
+    transition: all 0.3s ease;
+    /* 平滑过渡 */
+    z-index: 1000;
+    /* 高层级 */
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    /* 显示状态 */
+    transform: translateY(0);
+    /* 恢复位置 */
+}
+
+.back-to-top:hover {
+    transform: translateY(-5px);
+    /* 悬停时向上移动 */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    /* 增强阴影 */
+}
+
+.back-to-top:active {
+    transform: scale(0.95);
+    /* 点击时缩小 */
+}
+
+.back-to-top i {
+    font-size: 1.25rem;
+    /* 图标大小 */
+    transition: transform 0.3s ease;
+    /* 图标移动动画 */
+}
+
+.back-to-top:hover i {
+    transform: translateY(-2px);
+    /* 悬停时图标向上移动 */
+}
+
+/* 小屏幕适配 */
+@media (max-width: 640px) {
+    .back-to-top {
+        bottom: 1.5rem;
+        /* 调整底部距离 */
+        right: 1.5rem;
+        /* 调整右侧距离 */
+        width: 2.5rem;
+        /* 调整宽度 */
+        height: 2.5rem;
+        /* 调整高度 */
+    }
+}
+
+/* 亮色主题下的文本增强对比度 */
+[data-theme="light"] .tech-text {
+    color: var(--text-color) !important;
+    /* 强制使用主题文本颜色 */
+    font-weight: 500;
+    /* 加粗 */
+}
+
+/* 亮色主题下的链接样式增强 */
+[data-theme="light"] a:not(.btn) {
+    color: var(--link-color);
+    /* 使用主题链接颜色 */
+    text-decoration: none;
+    /* 移除下划线 */
+    position: relative;
+    /* 为悬停效果准备 */
+    transition: all 0.2s ease;
+    /* 平滑过渡 */
+}
+
+[data-theme="light"] a:not(.btn):after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -1px;
+    left: 0;
+    background-color: var(--link-hover);
+    transition: width 0.3s ease;
+    /* 下划线动画 */
+}
+
+[data-theme="light"] a:hover:not(.btn) {
+    color: var(--link-hover);
+    /* 使用主题悬停链接颜色 */
+}
+
+[data-theme="light"] a:hover:not(.btn):after {
+    width: 100%;
+    /* 悬停时显示下划线 */
+}
+
+/* 亮色主题下的按钮样式增强 */
+[data-theme="light"] .btn {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* 平滑过渡 */
+    position: relative;
+    /* 为特效准备 */
+    overflow: hidden;
+    /* 隐藏溢出内容 */
+}
+
+[data-theme="light"] .btn:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(59, 130, 246, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+    /* 涟漪动画准备 */
+}
+
+[data-theme="light"] .btn:hover:before {
+    width: 300%;
+    height: 300%;
+    /* 涟漪扩散效果 */
+}
+
+[data-theme="light"] .btn:active {
+    transform: scale(0.98);
+    /* 点击时缩小效果 */
+}
+
+/* 亮色主题下的标签筛选样式增强 */
+[data-theme="light"] .tag-filter {
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    /* 淡边框 */
+    background-color: white;
+    /* 白色背景 */
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.05);
+    /* 轻微阴影 */
+    transition: all 0.3s ease;
+    /* 平滑过渡 */
+}
+
+[data-theme="light"] .tag-filter:hover {
+    transform: translateY(-2px);
+    /* 上移效果 */
+    box-shadow: 0 5px 15px rgba(15, 23, 42, 0.08);
+    /* 增强阴影 */
+    border-color: var(--highlight-color);
+    /* 高亮边框 */
+}
+
+[data-theme="light"] .tag-filter.active {
+    background-color: var(--highlight-bg);
+    /* 高亮背景 */
+    border-color: var(--highlight-color);
+    /* 高亮边框 */
+    color: var(--highlight-color);
+    /* 高亮文字颜色 */
+}
+
+/* 亮色主题下卡片的特殊样式 */
+/* 继续亮色主题下的技术渐变背景 */
+[data-theme="light"] .tech-gradient {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    /* 亮色主题技术渐变背景 */
+}
+
+/* 自定义滚动条样式（深色主题） */
+::-webkit-scrollbar {
+    width: 8px;
+    /* 滚动条宽度 */
+    height: 8px;
+    /* 滚动条高度 */
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    /* 滚动条轨道背景 */
+    border-radius: 4px;
+    /* 圆角 */
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    /* 滚动条滑块颜色 */
+    border-radius: 4px;
+    /* 圆角 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+    /* 悬停时滑块颜色 */
+}
+
+/* 亮色主题下的滚动条样式 */
+[data-theme="light"] ::-webkit-scrollbar-track {
+    background: rgba(226, 232, 240, 0.5);
+    /* 轨道背景 - 更柔和的淡蓝灰色 */
+    border-radius: 6px;
+    /* 增大圆角 */
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.5);
+    /* 滑块颜色 - 中等灰蓝色，半透明 */
+    border-radius: 6px;
+    /* 增大圆角 */
+    border: 2px solid rgba(226, 232, 240, 0.5);
+    /* 边框效果，给滑块一个包围感 */
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 116, 139, 0.6);
+    /* 悬停时滑块颜色 - 更深的灰蓝色 */
+}
+
+/* 响应式设计：小屏幕调整 */
+@media (max-width: 768px) {
+    .tech-card {
+        transform: none;
+        /* 小屏幕禁用悬停变换效果 */
+    }
+
+    .tech-card:hover {
+        transform: none;
+        /* 小屏幕禁用悬停变换效果 */
+        box-shadow: 0 10px 20px rgba(0, 209, 255, 0.15);
+        /* 简化阴影 */
+    }
+
+    pre {
+        padding: 25px 15px 15px 15px;
+        /* 小屏幕调整代码块内边距 */
+    }
+
+    pre::before {
+        top: 8px;
+        /* 调整装饰圆点位置 */
+        left: 8px;
+        /* 调整装饰圆点位置 */
+    }
+
+    .copy-button {
+        padding: 4px 8px;
+        /* 小屏幕调整按钮大小 */
+        font-size: 0.8rem;
+        /* 调整按钮字体大小 */
+    }
+}
+
+/* 超小屏幕调整 */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+        /* 调整标题字体大小 */
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        /* 调整二级标题字体大小 */
+    }
+
+    .card-glass {
+        padding: 1rem;
+        /* 调整卡片内边距 */
+    }
+}
+
+/* 亮色模式下的背景纹理效果 */
+[data-theme="light"] body:before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(37, 99, 235, 0.03) 0%, transparent 30%),
+        radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.03) 0%, transparent 20%);
+    /* 微妙的光晕背景 */
+    pointer-events: none;
+    /* 不影响交互 */
+    z-index: -1;
+    /* 在内容之后 */
+}
+
+/* 亮色模式下的装饰图案效果 */
+[data-theme="light"] .card-glass:before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 100px;
+    height: 100px;
+    background-image: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+    /* 角落光晕效果 */
+    border-radius: 50%;
+    /* 圆形 */
+    z-index: -1;
+    /* 在内容之后 */
+}
+
+/* 为亮色模式下的输入框、选择框等添加更好的样式 */
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+    border: 1px solid rgba(203, 213, 225, 0.8);
+    /* 淡边框 */
+    border-radius: 0.375rem;
+    /* 圆角 */
+    padding: 0.5rem 0.75rem;
+    /* 内边距 */
+    background-color: white;
+    /* 白色背景 */
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    /* 轻微阴影 */
+    transition: all 0.2s ease;
+    /* 平滑过渡 */
+}
+
+[data-theme="light"] input:focus,
+[data-theme="light"] select:focus,
+[data-theme="light"] textarea:focus {
+    border-color: var(--highlight-color);
+    /* 高亮边框 */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    /* 聚焦时的光晕效果 */
+    outline: none;
+    /* 移除默认轮廓 */
+}
+
+/* 亮色模式下的微妙动画效果 */
+@keyframes subtle-float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+[data-theme="light"] .animate-subtle {
+    animation: subtle-float 5s ease-in-out infinite;
+    /* 微妙的浮动动画 */
+}
+
+/* 亮色主题下技术卡片样式增强 */
+[data-theme="light"] .tech-card {
+    background: white;
+    /* 白色背景 */
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    /* 淡边框 */
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+    /* 轻微阴影 */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* 精细的过渡效果 */
+    position: relative;
+    /* 相对定位，用于伪元素装饰 */
+    overflow: hidden;
+    /* 隐藏溢出内容 */
+}
+
+/* 亮色主题下技术卡片文本颜色增强 */
+[data-theme="light"] .tech-card h3 {
+    color: #1e40af !important;
+    /* 深蓝色标题，确保可读性 */
+}
+
+[data-theme="light"] .tech-card p {
+    color: #334155 !important;
+    /* 深灰色文本，提高与白色背景的对比度 */
+}
+
+[data-theme="light"] .tech-card .text-blue-100 {
+    color: #334155 !important;
+    /* 覆盖text-blue-100类在亮色主题下的颜色 */
+}
+
+[data-theme="light"] .tech-card:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, transparent 50%, rgba(59, 130, 246, 0.03) 50%);
+    /* 角落装饰效果 */
+}
+
+[data-theme="light"] .tech-card:hover {
+    transform: translateY(-10px) rotateX(2deg);
+    /* 悬停时上移并轻微旋转 */
+    box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
+    /* 增强阴影效果 */
+    border-color: rgba(59, 130, 246, 0.3);
+    /* 高亮边框 */
+}
+
+/* 亮色主题下搜索区域样式增强 */
+[data-theme="light"] .search-container {
+    background: white;
+    /* 白色背景 */
+    border-radius: 0.5rem;
+    /* 圆角 */
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+    /* 轻微阴影 */
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    /* 淡边框 */
+    transition: all 0.3s ease;
+    /* 平滑过渡 */
+    position: relative;
+    /* 相对定位 */
+    overflow: hidden;
+    /* 隐藏溢出内容 */
+}
+
+[data-theme="light"] .search-container:focus-within {
+    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -2px rgba(15, 23, 42, 0.05);
+    /* 聚焦时增强阴影 */
+    border-color: var(--highlight-color);
+    /* 高亮边框 */
+}
+
+[data-theme="light"] .search-container:before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%);
+    /* 装饰效果 */
+    border-radius: 50%;
+    /* 圆形 */
+    z-index: 0;
+    /* 在内容之下 */
+}
+
+/* 亮色主题下的搜索按钮样式 */
+[data-theme="light"] .search-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    /* 渐变背景 */
+    color: white;
+    /* 白色文字 */
+    border-radius: 0.375rem;
+    /* 圆角 */
+    padding: 0.5rem 1rem;
+    /* 内边距 */
+    font-weight: 500;
+    /* 字体加粗 */
+    box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3);
+    /* 阴影效果 */
+    transition: all 0.3s ease;
+    /* 平滑过渡 */
+    border: none;
+    /* 无边框 */
+}
+
+[data-theme="light"] .search-btn:hover {
+    transform: translateY(-2px);
+    /* 悬停时上移 */
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    /* 增强阴影 */
+}
+
+[data-theme="light"] .search-btn:active {
+    transform: translateY(0);
+    /* 点击时恢复 */
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
+    /* 减弱阴影 */
+}
+
+/* 深色模式下的标题增强 */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3 {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    /* 文本阴影，增强可读性 */
+}
+
+/* 亮色模式下的标题增强 */
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3 {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    /* 轻微文本阴影，提高对比度 */
+}
+
+/* 深色模式下重要文本的背景增强 */
+[data-theme="dark"] .important-text {
+    background-color: rgba(59, 130, 246, 0.1);
+    /* 淡蓝色背景 */
+    border-radius: 4px;
+    /* 圆角 */
+    padding: 0 4px;
+    /* 内边距 */
+}
+
+/* 亮色模式下重要文本的背景增强 */
+[data-theme="light"] .important-text {
+    background-color: rgba(59, 130, 246, 0.08);
+    /* 淡蓝色背景 */
+    border-radius: 4px;
+    /* 圆角 */
+    padding: 0 4px;
+    /* 内边距 */
+}
+
+/* 深色模式下的渐变文本增强 */
+[data-theme="dark"] .text-gradient {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    /* 文本阴影 */
+}
+
+/* 亮色模式下的渐变文本增强 */
+[data-theme="light"] .text-gradient {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    /* 文本阴影 */
+}
+
+/* 列表项样式增强 */
+li {
+    position: relative;
+    /* 相对定位 */
+    margin-bottom: 8px;
+    /* 底部间距 */
+}
+
+/* 亮色模式下的列表项前装饰 */
+[data-theme="light"] ul li::before {
+    content: "•";
+    /* 项目符号 */
+    color: var(--highlight-color);
+    /* 高亮颜色 */
+    font-weight: bold;
+    /* 粗体 */
+    display: inline-block;
+    /* 行内块 */
+    width: 1em;
+    /* 宽度 */
+    margin-left: -1em;
+    /* 左边距 */
+}
+
+/* 图像增强 */
+img {
+    border-radius: 4px;
+    /* 圆角 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* 阴影 */
+}
+
+/* 亮色模式下的图像增强 */
+[data-theme="light"] img {
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    /* 淡边框 */
+}

@@ -1,0 +1,1093 @@
+<!DOCTYPE html> <!-- 声明文档类型为 HTML5 -->
+<!-- 
+文件结构说明：
+- 此HTML文件位于assets目录下
+- CSS文件位于assets/css目录下
+- JS文件位于assets/js目录下
+- 所有路径引用应该是相对于当前HTML文件的位置
+-->
+<html lang="zh-CN"> <!-- 设置文档语言为中文（中国） -->
+
+<head>
+    <meta charset="UTF-8"> <!-- 设置字符编码为 UTF-8，支持中文 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 设置视口适配移动设备 -->
+    <meta name="baidu-site-verification" content="" /> <!-- 百度站点验证（此处为空） -->
+    <meta name="description" content="Docker镜像加速站是一种通过配置国内或国际的镜像加速器，来提高从Docker Hub等官方仓库拉取镜像的速度和稳定性的服务。">
+    <!-- 网站描述，用于搜索引擎优化 -->
+    <meta property="og:title" content="Docker镜像加速站" /> <!-- Open Graph 标题，用于社交媒体分享 -->
+    <meta property="og:description" content="Docker镜像加速站是一种通过配置国内或国际的镜像加速器，来提高从Docker Hub等官方仓库拉取镜像的速度和稳定性的服务。" />
+    <!-- Open Graph 描述 -->
+    <meta name="google-adsense-account" content=""> <!-- Google AdSense 账户（此处为空） -->
+    <title>Docker镜像加速站</title> <!-- 页面标题 -->
+    <!-- 使用编译后的Tailwind CSS (生产环境推荐) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- 引入外部 CSS 文件 -->
+</head>
+
+<body>
+    <!-- 页面加载进度条 -->
+    <div id="nprogress"> <!-- 进度条容器 -->
+        <div class="bar" role="bar"> <!-- 进度条主体 -->
+            <div class="peg"></div> <!-- 进度条末尾的光晕效果 -->
+        </div>
+        <div class="spinner" role="spinner"> <!-- 加载旋转图标（默认隐藏） -->
+            <div class="spinner-icon"></div> <!-- 旋转图标内容 -->
+        </div>
+    </div>
+
+    <!-- 深色主题导航栏 -->
+    <nav
+        class="bg-black bg-opacity-50 backdrop-filter backdrop-blur-lg fixed w-full z-50 border-b border-gray-800 dark-theme-only">
+        <!-- 导航栏，深色主题 -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <!-- 居中容器，设置最大宽度和内边距 -->
+            <div class="flex justify-between h-16 items-center"> <!-- 导航栏内容，水平分布且垂直居中 -->
+                <div class="flex-shrink-0 flex items-center"> <!-- 左侧 logo 和标题 -->
+                    <div class="relative"> <!-- 相对定位容器，用于图标和状态点 -->
+                        <i class="fab fa-docker text-3xl text-blue-400"></i> <!-- Docker 图标 -->
+                        <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full pulse-icon"></div>
+                        <!-- 绿色状态点，带有脉动动画 -->
+                    </div>
+                    <span
+                        class="text-xl font-bold text-white ml-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
+                        <!-- 标题文本，渐变效果 -->
+                        Docker镜像加速站
+                    </span>
+                </div>
+                <div class="hidden md:flex items-center space-x-1"> <!-- 导航链接，仅在中等及以上屏幕显示 -->
+                    <a href="#usage-1"
+                        class="inline-flex items-center px-3 py-2 rounded hover:bg-blue-900/30 text-white hover:text-blue-400 transition-all duration-200">
+                        <!-- 使用方法链接 -->
+                        <i class="fas fa-book text-blue-400 mr-2"></i> <!-- 图标 -->
+                        使用方法
+                    </a>
+                    <a href="#search-mirrors"
+                        class="inline-flex items-center px-3 py-2 rounded hover:bg-blue-900/30 text-white hover:text-blue-400 transition-all duration-200">
+                        <!-- 镜像搜索链接 -->
+                        <i class="fas fa-search text-blue-400 mr-2"></i> <!-- 图标 -->
+                        镜像搜索
+                    </a>
+                    <a href="#tech-arch"
+                        class="inline-flex items-center px-3 py-2 rounded hover:bg-blue-900/30 text-white hover:text-blue-400 transition-all duration-200">
+                        <!-- 技术架构链接 -->
+                        <i class="fas fa-server text-blue-400 mr-2"></i> <!-- 图标 -->
+                        技术架构
+                    </a>
+                    <a href="https://github.com/520svip/docker-hub-npm" target="_blank"
+                        class="inline-flex items-center px-3 py-2 rounded hover:bg-blue-900/30 text-white hover:text-blue-400 transition-all duration-200">
+                        <!-- GitHub 链接 -->
+                        <i class="fab fa-github text-xl"></i> <!-- 图标 -->
+                    </a>
+                    <a href="https://gitee.com/svip520/docker-hub-npm" target="_blank"
+                        class="inline-flex items-center px-3 py-2 rounded hover:bg-blue-900/30 text-white hover:text-blue-400 transition-all duration-200">
+                        <!-- Gitee 链接 -->
+                        <i class="fas fa-code-branch text-xl"></i> <!-- 图标 -->
+                    </a>
+                    <button id="theme-toggle"
+                        class="inline-flex items-center px-3 py-2 rounded hover:bg-blue-900/30 text-white hover:text-blue-400 transition-all duration-200">
+                        <!-- 主题切换按钮 -->
+                        <i class="fas fa-sun text-blue-400"></i> <!-- 默认显示太阳图标，表示切换到亮色 -->
+                    </button>
+                </div>
+                <!-- 移动端导航按钮 -->
+                <div class="md:hidden flex items-center"> <!-- 仅在小屏幕显示的菜单按钮 -->
+                    <button id="mobile-menu-button" class="text-white focus:outline-none"> <!-- 菜单按钮 -->
+                        <i class="fas fa-bars text-xl"></i> <!-- 三横杠图标 -->
+                    </button>
+                </div>
+            </div>
+            <!-- 移动端导航菜单 -->
+            <div id="mobile-menu" class="md:hidden hidden py-2"> <!-- 移动端菜单，默认隐藏 -->
+                <a href="#usage-1" class="block px-4 py-2 text-white hover:bg-blue-900/50"> <!-- 使用方法链接 -->
+                    <i class="fas fa-book text-blue-400 mr-2"></i> <!-- 图标 -->
+                    使用方法
+                </a>
+                <a href="#search-mirrors" class="block px-4 py-2 text-white hover:bg-blue-900/50"> <!-- 镜像搜索链接 -->
+                    <i class="fas fa-search text-blue-400 mr-2"></i> <!-- 图标 -->
+                    镜像搜索
+                </a>
+                <a href="#tech-arch" class="block px-4 py-2 text-white hover:bg-blue-900/50"> <!-- 技术架构链接 -->
+                    <i class="fas fa-server text-blue-400 mr-2"></i> <!-- 图标 -->
+                    技术架构
+                </a>
+                <a href="https://github.com/520svip/docker-hub-npm" target="_blank"
+                    class="block px-4 py-2 text-white hover:bg-blue-900/50"> <!-- GitHub 链接 -->
+                    <i class="fab fa-github text-blue-400 mr-2"></i> <!-- 图标 -->
+                    GitHub
+                </a>
+                <a href="https://gitee.com/svip520/docker-hub-npm" target="_blank"
+                    class="block px-4 py-2 text-white hover:bg-blue-900/50"> <!-- Gitee 链接 -->
+                    <i class="fas fa-code-branch text-blue-400 mr-2"></i> <!-- 图标 -->
+                    Gitee
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 亮色主题导航栏 -->
+    <nav
+        class="bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg fixed w-full z-50 border-b border-gray-300 shadow-md light-theme-only hidden">
+        <!-- 导航栏，亮色主题，默认隐藏 -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <!-- 居中容器 -->
+            <div class="flex justify-between h-16 items-center"> <!-- 导航栏内容 -->
+                <div class="flex-shrink-0 flex items-center"> <!-- 左侧 logo 和标题 -->
+                    <div class="relative"> <!-- 相对定位容器 -->
+                        <i class="fab fa-docker text-3xl text-blue-600"></i> <!-- Docker 图标，颜色更鲜艳 -->
+                        <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full pulse-icon"></div>
+                        <!-- 绿色状态点 -->
+                    </div>
+                    <span
+                        class="text-xl font-bold ml-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+                        <!-- 标题文本，更现代的渐变效果 -->
+                        Docker镜像加速站
+                    </span>
+                </div>
+                <div class="hidden md:flex items-center space-x-2"> <!-- 导航链接，仅在中等及以上屏幕显示 -->
+                    <a href="#usage-1"
+                        class="inline-flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-all duration-200">
+                        <!-- 使用方法链接，圆角更大 -->
+                        <i class="fas fa-book text-blue-600 mr-2"></i> <!-- 图标，颜色更鲜艳 -->
+                        使用方法
+                    </a>
+                    <a href="#search-mirrors"
+                        class="inline-flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-all duration-200">
+                        <!-- 镜像搜索链接，圆角更大 -->
+                        <i class="fas fa-search text-blue-600 mr-2"></i> <!-- 图标，颜色更鲜艳 -->
+                        镜像搜索
+                    </a>
+                    <a href="#tech-arch"
+                        class="inline-flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-all duration-200">
+                        <!-- 技术架构链接，圆角更大 -->
+                        <i class="fas fa-server text-blue-600 mr-2"></i> <!-- 图标，颜色更鲜艳 -->
+                        技术架构
+                    </a>
+                    <a href="https://github.com/520svip/docker-hub-npm" target="_blank"
+                        class="inline-flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-all duration-200">
+                        <!-- GitHub 链接，圆角更大 -->
+                        <i
+                            class="fab fa-github text-xl text-gray-700 hover:text-blue-600 transition-colors duration-200"></i>
+                        <!-- 图标，添加过渡效果 -->
+                    </a>
+                    <a href="https://gitee.com/svip520/docker-hub-npm" target="_blank"
+                        class="inline-flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-all duration-200">
+                        <!-- Gitee 链接，圆角更大 -->
+                        <i
+                            class="fas fa-code-branch text-xl text-gray-700 hover:text-blue-600 transition-colors duration-200"></i>
+                        <!-- 图标，添加过渡效果 -->
+                    </a>
+                    <button id="theme-toggle-light"
+                        class="inline-flex items-center px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-all duration-200">
+                        <!-- 主题切换按钮，圆角更大 -->
+                        <i class="fas fa-moon text-blue-600"></i> <!-- 月亮图标 -->
+                    </button>
+                </div>
+                <!-- 移动端导航按钮 -->
+                <div class="md:hidden flex items-center"> <!-- 仅在小屏幕显示的菜单按钮 -->
+                    <button id="mobile-menu-button-light"
+                        class="text-gray-700 focus:outline-none rounded-lg p-2 hover:bg-blue-50 transition-colors duration-200">
+                        <!-- 菜单按钮，添加悬停效果 -->
+                        <i class="fas fa-bars text-xl"></i> <!-- 三横杠图标 -->
+                    </button>
+                </div>
+            </div>
+            <!-- 移动端导航菜单 -->
+            <div id="mobile-menu-light" class="md:hidden hidden py-2"> <!-- 移动端菜单，默认隐藏 -->
+                <a href="#usage-1"
+                    class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mx-1 my-1 transition-all duration-200">
+                    <!-- 使用方法链接，添加圆角和间距 -->
+                    <i class="fas fa-book text-blue-600 mr-2"></i> <!-- 图标 -->
+                    使用方法
+                </a>
+                <a href="#search-mirrors"
+                    class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mx-1 my-1 transition-all duration-200">
+                    <!-- 镜像搜索链接，添加圆角和间距 -->
+                    <i class="fas fa-search text-blue-600 mr-2"></i> <!-- 图标 -->
+                    镜像搜索
+                </a>
+                <a href="#tech-arch"
+                    class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mx-1 my-1 transition-all duration-200">
+                    <!-- 技术架构链接，添加圆角和间距 -->
+                    <i class="fas fa-server text-blue-600 mr-2"></i> <!-- 图标 -->
+                    技术架构
+                </a>
+                <a href="https://github.com/520svip/docker-hub-npm" target="_blank"
+                    class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mx-1 my-1 transition-all duration-200">
+                    <!-- GitHub 链接，添加圆角和间距 -->
+                    <i class="fab fa-github text-blue-600 mr-2"></i> <!-- 图标 -->
+                    GitHub
+                </a>
+                <a href="https://gitee.com/svip520/docker-hub-npm" target="_blank"
+                    class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg mx-1 my-1 transition-all duration-200">
+                    <!-- Gitee 链接，添加圆角和间距 -->
+                    <i class="fas fa-code-branch text-blue-600 mr-2"></i> <!-- 图标 -->
+                    Gitee
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="pt-24 pb-12"> <!-- 页面主体内容，顶部留出导航栏空间 -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8"> <!-- 居中容器 -->
+            <!-- 面包屑导航 -->
+            <div class="mb-6"> <!-- 面包屑导航容器 -->
+                <nav class="flex" aria-label="Breadcrumb"> <!-- 面包屑导航 -->
+                    <ol class="inline-flex items-center space-x-1 md:space-x-3"> <!-- 有序列表，水平排列 -->
+                        <li class="inline-flex items-center"> <!-- 首页导航项 -->
+                            <a href="/"
+                                class="text-gray-400 hover:text-blue-400 transition-colors duration-200 dark-theme-only">
+                                <!-- 深色主题链接 -->
+                                <i class="fas fa-home mr-2"></i> <!-- 首页图标 -->
+                                首页
+                            </a>
+                            <a href="/"
+                                class="text-gray-700 hover:text-blue-700 transition-colors duration-200 light-theme-only hidden">
+                                <!-- 亮色主题链接，默认隐藏 -->
+                                <i class="fas fa-home mr-2"></i> <!-- 首页图标 -->
+                                首页
+                            </a>
+                        </li>
+                        <li> <!-- 当前页面导航项 -->
+                            <div class="flex items-center"> <!-- 导航项内容 -->
+                                <i class="fas fa-chevron-right text-gray-400 mx-2 dark-theme-only"></i> <!-- 深色主题分隔符 -->
+                                <span class="text-blue-400 dark-theme-only">Docker镜像加速</span> <!-- 深色主题文本 -->
+                                <i class="fas fa-chevron-right text-gray-700 mx-2 light-theme-only hidden"></i>
+                                <!-- 亮色主题分隔符，默认隐藏 -->
+                                <span class="text-blue-700 light-theme-only hidden">Docker镜像加速</span>
+                                <!-- 亮色主题文本，默认隐藏 -->
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-glass rounded-xl p-8 animate-fadeIn"> <!-- 主内容卡片，玻璃效果 -->
+                <!-- 顶部信息 -->
+                <div class="text-center mb-12"> <!-- 顶部信息区域 -->
+                    <h1
+                        class="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-100 dark-theme-only">
+                        <!-- 深色主题标题 -->
+                        <i class="fab fa-docker text-blue-400 mr-3"></i> <!-- Docker 图标 -->
+                        Docker镜像加速说明
+                    </h1>
+                    <h1
+                        class="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-800 to-blue-600 light-theme-only hidden">
+                        <!-- 亮色主题标题，默认隐藏 -->
+                        <i class="fab fa-docker text-blue-600 mr-3"></i> <!-- Docker 图标 -->
+                        Docker镜像加速说明
+                    </h1>
+                    <div class="flex justify-center items-center space-x-4"> <!-- 时间信息卡片容器 -->
+                        <div class="relative group animate-fadeIn"> <!-- 时间卡片，带有动画 -->
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-300 animate-pulse">
+                            </div> <!-- 背景渐变效果 -->
+                            <div
+                                class="relative bg-gradient-to-br from-gray-900/90 to-black/90 p-6 rounded-xl border border-blue-500/20 backdrop-blur-xl shadow-2xl dark-theme-only">
+                                <!-- 深色主题时间卡片 -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4"> <!-- 网格布局 -->
+                                    <!-- 左侧：时钟和日期 -->
+                                    <div class="flex flex-col items-center justify-center"> <!-- 时钟和日期容器 -->
+                                        <div
+                                            class="relative w-24 h-24 rounded-full border-4 border-blue-400/30 flex items-center justify-center mb-3">
+                                            <!-- 时钟圆形容器 -->
+                                            <div class="absolute w-full h-full rounded-full border-t-4 border-blue-400 animate-spin"
+                                                style="animation-duration: 10s;"></div> <!-- 旋转边框 -->
+                                            <div
+                                                class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                                                <!-- 时钟图标 -->
+                                                <i class="far fa-clock"></i> <!-- 时钟图标 -->
+                                            </div>
+                                        </div>
+                                        <p id="time"
+                                            class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                                        </p> <!-- 当前时间 -->
+                                        <p id="date" class="text-sm text-blue-300 mt-1"></p> <!-- 当前日期 -->
+                                    </div>
+                                    <!-- 右侧：额外信息 -->
+                                    <div class="flex flex-col justify-center space-y-3"> <!-- 额外信息容器 -->
+                                        <div class="flex items-center space-x-2"> <!-- 星期信息 -->
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-blue-900/50 flex items-center justify-center">
+                                                <!-- 图标容器 -->
+                                                <i class="fas fa-calendar-alt text-blue-400"></i> <!-- 日历图标 -->
+                                            </div>
+                                            <div>
+                                                <p id="weekday" class="text-sm font-medium text-blue-200"></p>
+                                                <!-- 星期几 -->
+                                                <p id="day-of-year" class="text-xs text-blue-400"></p> <!-- 当年第几天 -->
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2"> <!-- 时区信息 -->
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-blue-900/50 flex items-center justify-center">
+                                                <!-- 图标容器 -->
+                                                <i class="fas fa-globe-asia text-blue-400"></i> <!-- 地球图标 -->
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-blue-200">Asia/Shanghai</p>
+                                                <!-- 时区 -->
+                                                <p id="utc-time" class="text-xs text-blue-400"></p> <!-- UTC 时间 -->
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2"> <!-- 页面加载时间 -->
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-blue-900/50 flex items-center justify-center">
+                                                <!-- 图标容器 -->
+                                                <i class="fas fa-stopwatch text-blue-400"></i> <!-- 秒表图标 -->
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-blue-200">页面已加载</p> <!-- 文本 -->
+                                                <p id="page-loaded-time" class="text-xs text-blue-400">0秒</p>
+                                                <!-- 加载时间 -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 亮色主题时间卡片 -->
+                            <div
+                                class="relative bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200 backdrop-blur-xl shadow-xl light-theme-only hidden">
+                                <!-- 亮色主题时间卡片，默认隐藏 -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4"> <!-- 网格布局 -->
+                                    <!-- 左侧：时钟和日期 -->
+                                    <div class="flex flex-col items-center justify-center"> <!-- 时钟和日期容器 -->
+                                        <div
+                                            class="relative w-24 h-24 rounded-full border-4 border-blue-500/30 flex items-center justify-center mb-3">
+                                            <!-- 时钟圆形容器 -->
+                                            <div class="absolute w-full h-full rounded-full border-t-4 border-blue-500 animate-spin"
+                                                style="animation-duration: 10s;"></div> <!-- 旋转边框 -->
+                                            <div
+                                                class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                                                <!-- 时钟图标 -->
+                                                <i class="far fa-clock"></i> <!-- 时钟图标 -->
+                                            </div>
+                                        </div>
+                                        <p id="time-light"
+                                            class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                                        </p> <!-- 当前时间 -->
+                                        <p id="date-light" class="text-sm text-blue-700 mt-1"></p> <!-- 当前日期 -->
+                                    </div>
+                                    <!-- 右侧：额外信息 -->
+                                    <div class="flex flex-col justify-center space-y-3"> <!-- 额外信息容器 -->
+                                        <div class="flex items-center space-x-2"> <!-- 星期信息 -->
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center">
+                                                <!-- 图标容器 -->
+                                                <i class="fas fa-calendar-alt text-blue-600"></i> <!-- 日历图标 -->
+                                            </div>
+                                            <div>
+                                                <p id="weekday-light" class="text-sm font-medium text-blue-700"></p>
+                                                <!-- 星期几 -->
+                                                <p id="day-of-year-light" class="text-xs text-blue-600"></p>
+                                                <!-- 当年第几天 -->
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2"> <!-- 时区信息 -->
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center">
+                                                <!-- 图标容器 -->
+                                                <i class="fas fa-globe-asia text-blue-600"></i> <!-- 地球图标 -->
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-blue-700">Asia/Shanghai</p>
+                                                <!-- 时区 -->
+                                                <p id="utc-time-light" class="text-xs text-blue-600"></p>
+                                                <!-- UTC 时间 -->
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2"> <!-- 页面加载时间 -->
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center">
+                                                <!-- 图标容器 -->
+                                                <i class="fas fa-stopwatch text-blue-600"></i> <!-- 秒表图标 -->
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-blue-700">页面已加载</p> <!-- 文本 -->
+                                                <p id="page-loaded-time-light" class="text-xs text-blue-600">0秒</p>
+                                                <!-- 加载时间 -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 声明信息 - 醒目提示 -->
+                <div class="mb-12 animate-fadeIn"> <!-- 声明信息容器，带有动画 -->
+                    <div
+                        class="bg-red-900/30 rounded-xl p-6 shadow-xl border-2 border-red-500/50 backdrop-filter backdrop-blur-md dark-theme-only">
+                        <!-- 深色主题声明卡片 -->
+                        <div class="flex items-center justify-center mb-4"> <!-- 标题区域 -->
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-3xl mr-3"></i> <!-- 警告图标 -->
+                            <h2 class="text-2xl font-bold text-center text-yellow-400">重要声明</h2> <!-- 标题 -->
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-3xl ml-3"></i> <!-- 警告图标 -->
+                        </div>
+                        <div class="space-y-3 text-white"> <!-- 声明内容 -->
+                            <div class="flex items-start"> <!-- 第一条声明 -->
+                                <span class="font-bold text-yellow-400 mr-2 flex-shrink-0">1、</span> <!-- 编号 -->
+                                <p>本服务提供的能力为'docker镜像加速网站，为科研人员提供便利的镜像下载服务'。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start"> <!-- 第二条声明 -->
+                                <span class="font-bold text-yellow-400 mr-2 flex-shrink-0">2、</span> <!-- 编号 -->
+                                <p>代理存在不确定性以及镜像内容因为技术原因暂无法做到审查，服务提供方及cloudflare不对本服务提供可用性保障承诺。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start"> <!-- 第三条声明 -->
+                                <span class="font-bold text-yellow-400 mr-2 flex-shrink-0">3、</span> <!-- 编号 -->
+                                <p>使用人需有意识规避不合规镜像的使用，由此造成不合规后果归属于镜像所属人及镜像使用人。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start"> <!-- 第四条声明 -->
+                                <span class="font-bold text-yellow-400 mr-2 flex-shrink-0">4、</span> <!-- 编号 -->
+                                <p>如不接受此声明，请立即关闭本页面并暂停使用本网站提供的任何服务（包括但不限于立即删除本地已经缓存的任何从本网站下载的数据）。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start"> <!-- 第五条声明 -->
+                                <span class="font-bold text-yellow-400 mr-2 flex-shrink-0">5、</span> <!-- 编号 -->
+                                <p>感谢配合。</p> <!-- 内容 -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 亮色主题声明区块 -->
+                    <div
+                        class="bg-red-50 rounded-xl p-6 shadow-xl border-2 border-red-300 backdrop-filter backdrop-blur-md light-theme-only hidden">
+                        <!-- 亮色主题声明卡片，默认隐藏 -->
+                        <div class="flex items-center justify-center mb-4"> <!-- 标题区域 -->
+                            <i class="fas fa-exclamation-triangle text-red-500 text-3xl mr-3"></i> <!-- 警告图标 -->
+                            <h2 class="text-2xl font-bold text-center text-red-700">重要声明</h2> <!-- 标题 -->
+                            <i class="fas fa-exclamation-triangle text-red-500 text-3xl ml-3"></i> <!-- 警告图标 -->
+                        </div>
+                        <div class="space-y-3 text-gray-800"> <!-- 声明内容 -->
+                            <div class="flex items-start"> <!-- 第一条声明 -->
+                                <span class="font-bold text-red-600 mr-2 flex-shrink-0">1、</span> <!-- 编号 -->
+                                <p>本服务提供的能力为'docker镜像加速网站，为科研人员提供便利的镜像下载服务'。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start"> <!-- 第二条声明 -->
+                                <span class="font-bold text-red-600 mr-2 flex-shrink-0">2、</span> <!-- 编号 -->
+                                <p>代理存在不确定性以及镜像内容因为技术原因暂无法做到审查，服务提供方及cloudflare不对本服务提供可用性保障承诺。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start"> <!-- 第三条声明 -->
+                                <span class="font-bold text-red-600 mr-2 flex-shrink-0">3、</span> <!-- 编号 -->
+                                <p>使用人需有意识规避不合规镜像的使用，由此造成不合规后果归属于镜像所属人及镜像使用人。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start"> <!-- 第四条声明 -->
+                                <span class="font-bold text-red-600 mr-2 flex-shrink-0">4、</span> <!-- 编号 -->
+                                <p>如不接受此声明，请立即关闭本页面并暂停使用本网站提供的任何服务（包括但不限于立即删除本地已经缓存的任何从本网站下载的数据）。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start"> <!-- 第五条声明 -->
+                                <span class="font-bold text-red-600 mr-2 flex-shrink-0">5、</span> <!-- 编号 -->
+                                <p>感谢配合。</p> <!-- 内容 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 使用方法区块 -->
+                <div class="space-y-12"> <!-- 使用方法容器 -->
+                    <!-- 使用方法① -->
+                    <div id="usage-1" class="pt-16 -mt-16"> <!-- 使用方法①区域，调整顶部间距 -->
+                        <div
+                            class="bg-gradient-to-r from-blue-900/40 to-cyan-900/40 rounded-xl p-6 shadow-xl animate-fadeIn border-2 border-blue-500/50 backdrop-filter backdrop-blur-md">
+                            <!-- 使用方法卡片 -->
+                            <div class="absolute -top-3 -right-3 bg-blue-500 text-white px-3 py-1 rounded-full text-sm">
+                                <!-- 推荐标签 -->
+                                推荐
+                            </div>
+                            <h2
+                                class="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
+                                <!-- 标题 -->
+                                使用方法①：直接拉取
+                            </h2>
+                            <div class="space-y-6"> <!-- 内容容器 -->
+                                <div> <!-- 原拉取命令 -->
+                                    <h3 class="text-lg font-semibold text-white mb-2">原拉取镜像命令：</h3> <!-- 小标题 -->
+                                    <pre><code>docker pull library/alpine:latest</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre>
+                                    <!-- 代码块和复制按钮 -->
+                                </div>
+                                <div> <!-- 加速拉取命令 -->
+                                    <h3 class="text-lg font-semibold text-white mb-2">加速拉取镜像命令：</h3> <!-- 小标题 -->
+                                    <pre><code>docker pull {workers_host}/library/alpine:latest</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre>
+                                    <!-- 代码块和复制按钮 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 使用方法② -->
+                    <div id="usage-2"
+                        class="bg-black bg-opacity-40 rounded-xl p-6 shadow-xl animate-fadeIn border border-blue-400 border-opacity-30 backdrop-filter backdrop-blur-md dark-theme-only">
+                        <!-- 使用方法②卡片，深色模式 -->
+                        <h2
+                            class="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
+                            <!-- 标题 -->
+                            使用方法②：配置镜像加速器
+                        </h2>
+                        <div class="space-y-6"> <!-- 内容容器 -->
+                            <div> <!-- 编辑配置文件 -->
+                                <h3 class="text-lg font-semibold text-white mb-2">一键设置镜像加速：修改文件
+                                    /etc/docker/daemon.json（如果不存在则创建）</h3> <!-- 小标题 -->
+                                <pre><code>nano /etc/docker/daemon.json</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre>
+                                <!-- 代码块和复制按钮 -->
+                            </div>
+                            <div> <!-- 修改 JSON 文件 -->
+                                <h3 class="text-lg font-semibold text-white mb-2">修改JSON文件 更改为以下内容 然后保存</h3>
+                                <!-- 小标题 -->
+                                <pre><code>{
+  "registry-mirrors": ["https://{workers_host}"]
+}</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre> <!-- 代码块和复制按钮 -->
+                            </div>
+                            <div> <!-- 重启 Docker -->
+                                <h3 class="text-lg font-semibold text-white mb-2">重启Docker服务使配置生效</h3> <!-- 小标题 -->
+                                <pre><code>sudo systemctl daemon-reload
+sudo systemctl restart docker</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre>
+                                <!-- 代码块和复制按钮 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 使用方法②亮色模式 -->
+                    <div id="usage-2-light"
+                        class="bg-white bg-opacity-90 rounded-xl p-6 shadow-xl animate-fadeIn border border-blue-300 backdrop-filter backdrop-blur-md light-theme-only hidden">
+                        <!-- 使用方法②卡片，亮色模式 -->
+                        <h2
+                            class="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+                            <!-- 标题 -->
+                            使用方法②：配置镜像加速器
+                        </h2>
+                        <div class="space-y-6"> <!-- 内容容器 -->
+                            <div> <!-- 编辑配置文件 -->
+                                <h3 class="text-lg font-semibold text-gray-800 mb-2">一键设置镜像加速：修改文件
+                                    /etc/docker/daemon.json（如果不存在则创建）</h3> <!-- 小标题 -->
+                                <pre><code>nano /etc/docker/daemon.json</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre>
+                                <!-- 代码块和复制按钮 -->
+                            </div>
+                            <div> <!-- 修改 JSON 文件 -->
+                                <h3 class="text-lg font-semibold text-gray-800 mb-2">修改JSON文件 更改为以下内容 然后保存</h3>
+                                <!-- 小标题 -->
+                                <pre><code>{
+  "registry-mirrors": ["https://{workers_host}"]
+}</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre> <!-- 代码块和复制按钮 -->
+                            </div>
+                            <div> <!-- 重启 Docker -->
+                                <h3 class="text-lg font-semibold text-gray-800 mb-2">重启Docker服务使配置生效</h3> <!-- 小标题 -->
+                                <pre><code>sudo systemctl daemon-reload
+sudo systemctl restart docker</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre>
+                                <!-- 代码块和复制按钮 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 使用方法③ -->
+                    <div id="usage-3"
+                        class="bg-black bg-opacity-40 rounded-xl p-6 shadow-xl animate-fadeIn border border-blue-400 border-opacity-30 backdrop-filter backdrop-blur-md dark-theme-only">
+                        <!-- 使用方法③卡片，深色模式 -->
+                        <h2
+                            class="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
+                            <!-- 标题 -->
+                            使用方法③：命令行一键配置
+                        </h2>
+                        <div class="space-y-6"> <!-- 内容容器 -->
+                            <div> <!-- 一键配置命令 -->
+                                <h3 class="text-lg font-semibold text-white mb-2">为了加速镜像拉取，使用以下命令设置<b>registry
+                                        mirror</b>：</h3> <!-- 小标题 -->
+                                <pre><code data-original="sudo tee /etc/docker/daemon.json <<EOF
+{
+    &quot;registry-mirrors&quot;: [&quot;https://{workers_host}&quot;]
+}
+EOF">sudo tee /etc/docker/daemon.json &lt;&lt;EOF
+{
+    "registry-mirrors": ["https://{workers_host}"]
+}
+EOF</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre> <!-- 代码块和复制按钮 -->
+                            </div>
+                            <div> <!-- 重启 Docker -->
+                                <h3 class="text-lg font-semibold text-white mb-2">然后重启Docker服务使配置生效：</h3>
+                                <!-- 小标题 -->
+                                <pre><code>sudo systemctl daemon-reload
+sudo systemctl restart docker</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre>
+                                <!-- 代码块和复制按钮 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 使用方法③亮色模式 -->
+                    <div id="usage-3-light"
+                        class="bg-white bg-opacity-90 rounded-xl p-6 shadow-xl animate-fadeIn border border-blue-300 backdrop-filter backdrop-blur-md light-theme-only hidden">
+                        <!-- 使用方法③卡片，亮色模式 -->
+                        <h2
+                            class="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
+                            <!-- 标题 -->
+                            使用方法③：命令行一键配置
+                        </h2>
+                        <div class="space-y-6"> <!-- 内容容器 -->
+                            <div> <!-- 一键配置命令 -->
+                                <h3 class="text-lg font-semibold text-gray-800 mb-2">为了加速镜像拉取，使用以下命令设置<b>registry
+                                        mirror</b>：</h3> <!-- 小标题 -->
+                                <pre><code data-original="sudo tee /etc/docker/daemon.json <<EOF
+{
+    &quot;registry-mirrors&quot;: [&quot;https://{workers_host}&quot;]
+}
+EOF">sudo tee /etc/docker/daemon.json &lt;&lt;EOF
+{
+    "registry-mirrors": ["https://{workers_host}"]
+}
+EOF</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre> <!-- 代码块和复制按钮 -->
+                            </div>
+                            <div> <!-- 重启 Docker -->
+                                <h3 class="text-lg font-semibold text-gray-800 mb-2">然后重启Docker服务使配置生效：</h3>
+                                <!-- 小标题 -->
+                                <pre><code>sudo systemctl daemon-reload
+sudo systemctl restart docker</code><button class="copy-button" onclick="copyCode(this)">复制代码</button></pre>
+                                <!-- 代码块和复制按钮 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 技术架构介绍 -->
+                <div id="tech-arch" class="pt-16 -mt-16 animate-fadeIn"> <!-- 技术架构区域 -->
+                    <div class="flex items-center justify-center mb-6"> <!-- 标题区域 -->
+                        <div class="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent w-1/6 mr-4">
+                        </div> <!-- 左侧渐变线 -->
+                        <h2
+                            class="text-2xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
+                            <!-- 标题 -->
+                            <i class="fas fa-server text-blue-400 mr-2"></i> <!-- 服务器图标 -->
+                            技术架构
+                        </h2>
+                        <div class="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent w-1/6 ml-4">
+                        </div> <!-- 右侧渐变线 -->
+                    </div>
+                    <div
+                        class="bg-black bg-opacity-40 rounded-xl p-6 shadow-xl border border-blue-400 border-opacity-30 backdrop-filter backdrop-blur-md">
+                        <!-- 技术架构卡片 -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> <!-- 网格布局 -->
+                            <div
+                                class="tech-card p-4 rounded-lg bg-gradient-to-br from-blue-900/50 to-blue-800/30 border border-blue-700/30">
+                                <!-- 全球加速卡片 -->
+                                <div class="text-center"> <!-- 居中内容 -->
+                                    <div class="inline-block p-3 bg-blue-900/50 rounded-full mb-4"> <!-- 图标容器 -->
+                                        <i class="fas fa-bolt text-3xl text-blue-400"></i> <!-- 闪电图标 -->
+                                    </div>
+                                    <h3 class="text-xl font-semibold text-white mb-2">全球加速</h3> <!-- 小标题 -->
+                                    <p class="text-blue-100">基于 Cloudflare 全球CDN网络，提供稳定快速的镜像拉取体验</p> <!-- 描述 -->
+                                </div>
+                            </div>
+                            <div
+                                class="tech-card p-4 rounded-lg bg-gradient-to-br from-purple-900/50 to-purple-800/30 border border-purple-700/30">
+                                <!-- 安全可靠卡片 -->
+                                <div class="text-center"> <!-- 居中内容 -->
+                                    <div class="inline-block p-3 bg-purple-900/50 rounded-full mb-4"> <!-- 图标容器 -->
+                                        <i class="fas fa-lock text-3xl text-purple-400"></i> <!-- 锁图标 -->
+                                    </div>
+                                    <h3 class="text-xl font-semibold text-white mb-2">安全可靠</h3> <!-- 小标题 -->
+                                    <p class="text-blue-100">全程HTTPS加密传输，保证镜像内容的一致性和安全性</p> <!-- 描述 -->
+                                </div>
+                            </div>
+                            <div
+                                class="tech-card p-4 rounded-lg bg-gradient-to-br from-green-900/50 to-green-800/30 border border-green-700/30">
+                                <!-- 开源项目卡片 -->
+                                <div class="text-center"> <!-- 居中内容 -->
+                                    <div class="inline-block p-3 bg-green-900/50 rounded-full mb-4"> <!-- 图标容器 -->
+                                        <i class="fas fa-code-branch text-3xl text-green-400"></i> <!-- 分支图标 -->
+                                    </div>
+                                    <h3 class="text-xl font-semibold text-white mb-2">开源项目</h3> <!-- 小标题 -->
+                                    <p class="text-blue-100">基于开源技术构建，社区共同维护，持续更新改进</p> <!-- 描述 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 镜像搜索 - 新设计 -->
+                <div id="search-mirrors" class="pt-16 -mt-16 mb-16 animate-fadeIn"> <!-- 镜像搜索区域 -->
+                    <div class="flex items-center justify-center mb-6"> <!-- 标题区域 -->
+                        <div class="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent w-1/6 mr-4">
+                        </div> <!-- 左侧渐变线 -->
+                        <h2
+                            class="text-2xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
+                            <!-- 标题 -->
+                            <i class="fas fa-search text-blue-400 mr-2"></i> <!-- 搜索图标 -->
+                            镜像搜索
+                        </h2>
+                        <div class="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent w-1/6 ml-4">
+                        </div> <!-- 右侧渐变线 -->
+                    </div>
+                    <div
+                        class="bg-gradient-to-br from-blue-900/30 to-indigo-900/30 backdrop-filter backdrop-blur-md rounded-xl p-6 border border-blue-400/30 shadow-xl max-w-3xl mx-auto dark-theme-only">
+                        <!-- 搜索卡片 -->
+                        <p class="text-center text-blue-100 mb-4">搜索并查找Docker Hub上的官方镜像和热门镜像</p> <!-- 提示文本 -->
+                        <div class="flex rounded-lg shadow-lg overflow-hidden"> <!-- 搜索框容器 -->
+                            <input type="text" id="search-input-new"
+                                class="flex-1 block w-full py-4 px-5 bg-gray-900/80 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none border-0"
+                                placeholder="输入镜像名称，例如: nginx, ubuntu, mysql..."> <!-- 搜索输入框 -->
+                            <button id="search-button-new"
+                                class="flex items-center justify-center px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white focus:outline-none transition-all duration-300 glow"
+                                onclick="performSearch()"> <!-- 搜索按钮 -->
+                                <i class="fas fa-search mr-2"></i> <!-- 搜索图标 -->
+                                <span>搜索</span> <!-- 按钮文本 -->
+                            </button>
+                        </div>
+                        <!-- 搜索历史 -->
+                        <div id="search-history" class="mt-4 hidden"> <!-- 搜索历史容器，默认隐藏 -->
+                            <h3 class="text-sm font-semibold text-blue-200 mb-2">搜索历史</h3> <!-- 小标题 -->
+                            <div id="history-list" class="flex flex-wrap gap-2"></div> <!-- 历史记录列表 -->
+                        </div>
+                        <!-- 标签筛选 -->
+                        <div class="mt-4"> <!-- 标签筛选容器 -->
+                            <h3 class="text-sm font-semibold text-blue-200 mb-2">常用标签</h3> <!-- 小标题 -->
+                            <div class="flex flex-wrap gap-2"> <!-- 标签列表 -->
+                                <span
+                                    class="tag-filter px-3 py-1 rounded-full text-sm font-medium bg-blue-900/50 text-blue-200 cursor-pointer hover:bg-blue-800/60"
+                                    data-tag="official"> <!-- 官方镜像标签 -->
+                                    <i class="fas fa-check-circle mr-1"></i> <!-- 图标 -->
+                                    官方镜像
+                                </span>
+                                <span
+                                    class="tag-filter px-3 py-1 rounded-full text-sm font-medium bg-blue-900/50 text-blue-200 cursor-pointer hover:bg-blue-800/60"
+                                    data-tag="popular"> <!-- 热门镜像标签 -->
+                                    <i class="fas fa-fire mr-1"></i> <!-- 图标 -->
+                                    热门镜像
+                                </span>
+                                <span
+                                    class="tag-filter px-3 py-1 rounded-full text-sm font-medium bg-blue-900/50 text-blue-200 cursor-pointer hover:bg-blue-800/60"
+                                    data-tag="verified"> <!-- 已验证标签 -->
+                                    <i class="fas fa-shield-alt mr-1"></i> <!-- 图标 -->
+                                    已验证
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-3 mt-4 justify-center"> <!-- 快速搜索标签 -->
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-900/50 text-blue-200 cursor-pointer hover:bg-blue-800/60"
+                                onclick="quickSearch('nginx')">nginx</span> <!-- nginx 标签 -->
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-900/50 text-blue-200 cursor-pointer hover:bg-blue-800/60"
+                                onclick="quickSearch('ubuntu')">ubuntu</span> <!-- ubuntu 标签 -->
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-900/50 text-blue-200 cursor-pointer hover:bg-blue-800/60"
+                                onclick="quickSearch('mysql')">mysql</span> <!-- mysql 标签 -->
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-900/50 text-blue-200 cursor-pointer hover:bg-blue-800/60"
+                                onclick="quickSearch('redis')">redis</span> <!-- redis 标签 -->
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-900/50 text-blue-200 cursor-pointer hover:bg-blue-800/60"
+                                onclick="quickSearch('node')">node</span> <!-- node 标签 -->
+                        </div>
+                    </div>
+
+                    <!-- 亮色模式搜索卡片 -->
+                    <div
+                        class="bg-blue-100 rounded-xl p-6 border border-blue-400 shadow-xl max-w-3xl mx-auto light-theme-only hidden">
+                        <!-- 搜索卡片 - 亮色模式 -->
+                        <p class="text-center text-blue-800 font-medium mb-4">搜索并查找Docker Hub上的官方镜像和热门镜像</p>
+                        <!-- 提示文本 -->
+                        <div class="flex rounded-lg shadow-lg overflow-hidden"> <!-- 搜索框容器 -->
+                            <input type="text" id="search-input-new-light"
+                                class="flex-1 block w-full py-4 px-5 bg-white text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:outline-none border border-blue-200"
+                                placeholder="输入镜像名称，例如: nginx, ubuntu, mysql..."> <!-- 搜索输入框 -->
+                            <button id="search-button-new-light"
+                                class="flex items-center justify-center px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white focus:outline-none transition-all duration-300"
+                                onclick="performSearch()"> <!-- 搜索按钮 -->
+                                <i class="fas fa-search mr-2"></i> <!-- 搜索图标 -->
+                                <span>搜索</span> <!-- 按钮文本 -->
+                            </button>
+                        </div>
+                        <!-- 搜索历史 -->
+                        <div id="search-history-light" class="mt-4 hidden"> <!-- 搜索历史容器，默认隐藏 -->
+                            <h3 class="text-sm font-semibold text-blue-700 mb-2">搜索历史</h3> <!-- 小标题 -->
+                            <div id="history-list-light" class="flex flex-wrap gap-2"></div> <!-- 历史记录列表 -->
+                        </div>
+                        <!-- 标签筛选 -->
+                        <div class="mt-4"> <!-- 标签筛选容器 -->
+                            <h3 class="text-sm font-semibold text-blue-700 mb-2">常用标签</h3> <!-- 小标题 -->
+                            <div class="flex flex-wrap gap-2"> <!-- 标签列表 -->
+                                <span
+                                    class="tag-filter-light px-3 py-1 rounded-full text-sm font-medium bg-blue-200 text-blue-800 cursor-pointer hover:bg-blue-300"
+                                    data-tag="official"> <!-- 官方镜像标签 -->
+                                    <i class="fas fa-check-circle mr-1"></i> <!-- 图标 -->
+                                    官方镜像
+                                </span>
+                                <span
+                                    class="tag-filter-light px-3 py-1 rounded-full text-sm font-medium bg-blue-200 text-blue-800 cursor-pointer hover:bg-blue-300"
+                                    data-tag="popular"> <!-- 热门镜像标签 -->
+                                    <i class="fas fa-fire mr-1"></i> <!-- 图标 -->
+                                    热门镜像
+                                </span>
+                                <span
+                                    class="tag-filter-light px-3 py-1 rounded-full text-sm font-medium bg-blue-200 text-blue-800 cursor-pointer hover:bg-blue-300"
+                                    data-tag="verified"> <!-- 已验证标签 -->
+                                    <i class="fas fa-shield-alt mr-1"></i> <!-- 图标 -->
+                                    已验证
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-3 mt-4 justify-center"> <!-- 快速搜索标签 -->
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-200 text-blue-800 cursor-pointer hover:bg-blue-300"
+                                onclick="quickSearch('nginx')">nginx</span> <!-- nginx 标签 -->
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-200 text-blue-800 cursor-pointer hover:bg-blue-300"
+                                onclick="quickSearch('ubuntu')">ubuntu</span> <!-- ubuntu 标签 -->
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-200 text-blue-800 cursor-pointer hover:bg-blue-300"
+                                onclick="quickSearch('mysql')">mysql</span> <!-- mysql 标签 -->
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-200 text-blue-800 cursor-pointer hover:bg-blue-300"
+                                onclick="quickSearch('redis')">redis</span> <!-- redis 标签 -->
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-200 text-blue-800 cursor-pointer hover:bg-blue-300"
+                                onclick="quickSearch('node')">node</span> <!-- node 标签 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 镜像加速服务使用协议 -->
+                <div class="mt-16 animate-fadeIn"> <!-- 使用协议区域 -->
+                    <div class="flex items-center justify-center mb-6"> <!-- 标题区域 -->
+                        <div class="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent w-1/4 mr-4">
+                        </div> <!-- 左侧渐变线 -->
+                        <h2
+                            class="text-2xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
+                            <!-- 标题 -->
+                            <i class="fas fa-shield-alt text-blue-400 mr-2"></i> <!-- 盾牌图标 -->
+                            镜像加速服务使用协议
+                        </h2>
+                        <div class="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent w-1/4 ml-4">
+                        </div> <!-- 右侧渐变线 -->
+                    </div>
+                    <div
+                        class="bg-gradient-to-br from-blue-900/30 to-indigo-900/30 backdrop-filter backdrop-blur-md rounded-xl p-8 border-2 border-blue-400/30 shadow-xl dark-theme-only">
+                        <!-- 使用协议卡片 -->
+                        <div class="space-y-4 text-gray-200"> <!-- 协议内容 -->
+                            <div class="flex items-start space-x-3"> <!-- 第一条协议 -->
+                                <div class="flex-shrink-0 text-blue-400"> <!-- 图标 -->
+                                    <i class="fas fa-check-circle text-lg"></i> <!-- 勾选图标 -->
+                                </div>
+                                <p class="flex-1">用户在使用本程序时，需遵守当地法律法规，任何因非法使用本程序而导致的法律责任，由用户自行承担，与本程序开发者无关。</p>
+                                <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start space-x-3"> <!-- 第二条协议 -->
+                                <div class="flex-shrink-0 text-blue-400"> <!-- 图标 -->
+                                    <i class="fas fa-check-circle text-lg"></i> <!-- 勾选图标 -->
+                                </div>
+                                <p class="flex-1">请用户在使用本程序时，遵守法律法规，不得用于任何非法目的，否则后果自负。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start space-x-3"> <!-- 第三条协议 -->
+                                <div class="flex-shrink-0 text-blue-400"> <!-- 图标 -->
+                                    <i class="fas fa-check-circle text-lg"></i> <!-- 勾选图标 -->
+                                </div>
+                                <p class="flex-1">使用者在使用本程序时，需自行承担风险，本程序开发者不对任何因使用本程序而导致的任何直接或间接损失承担责任。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start space-x-3"> <!-- 第四条协议 -->
+                                <div class="flex-shrink-0 text-blue-400"> <!-- 图标 -->
+                                    <i class="fas fa-check-circle text-lg"></i> <!-- 勾选图标 -->
+                                </div>
+                                <p class="flex-1">使用者在使用本程序时，需自行承担风险，并同意不会因使用本程序而向开发者提出任何索赔要求。</p> <!-- 内容 -->
+                            </div>
+                            <div
+                                class="mt-6 p-4 bg-gradient-to-r from-blue-900/50 to-cyan-900/50 rounded-lg border border-blue-400/40 shadow-inner">
+                                <!-- 强调声明 -->
+                                <p class="text-blue-100 text-center font-semibold"> <!-- 文本 -->
+                                    <i class="fas fa-exclamation-circle mr-2"></i> <!-- 警告图标 -->
+                                    使用本程序即视为同意本免责声明的所有条款。如果使用者不同意本免责声明的任何条款，请立即停止使用本程序。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 亮色模式使用协议卡片 -->
+                    <div class="bg-blue-50 rounded-xl p-8 border-2 border-blue-300 shadow-xl light-theme-only hidden">
+                        <!-- 使用协议卡片 - 亮色模式 -->
+                        <div class="space-y-4 text-gray-700"> <!-- 协议内容 -->
+                            <div class="flex items-start space-x-3"> <!-- 第一条协议 -->
+                                <div class="flex-shrink-0 text-blue-600"> <!-- 图标 -->
+                                    <i class="fas fa-check-circle text-lg"></i> <!-- 勾选图标 -->
+                                </div>
+                                <p class="flex-1">用户在使用本程序时，需遵守当地法律法规，任何因非法使用本程序而导致的法律责任，由用户自行承担，与本程序开发者无关。</p>
+                                <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start space-x-3"> <!-- 第二条协议 -->
+                                <div class="flex-shrink-0 text-blue-600"> <!-- 图标 -->
+                                    <i class="fas fa-check-circle text-lg"></i> <!-- 勾选图标 -->
+                                </div>
+                                <p class="flex-1">请用户在使用本程序时，遵守法律法规，不得用于任何非法目的，否则后果自负。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start space-x-3"> <!-- 第三条协议 -->
+                                <div class="flex-shrink-0 text-blue-600"> <!-- 图标 -->
+                                    <i class="fas fa-check-circle text-lg"></i> <!-- 勾选图标 -->
+                                </div>
+                                <p class="flex-1">使用者在使用本程序时，需自行承担风险，本程序开发者不对任何因使用本程序而导致的任何直接或间接损失承担责任。</p> <!-- 内容 -->
+                            </div>
+                            <div class="flex items-start space-x-3"> <!-- 第四条协议 -->
+                                <div class="flex-shrink-0 text-blue-600"> <!-- 图标 -->
+                                    <i class="fas fa-check-circle text-lg"></i> <!-- 勾选图标 -->
+                                </div>
+                                <p class="flex-1">使用者在使用本程序时，需自行承担风险，并同意不会因使用本程序而向开发者提出任何索赔要求。</p> <!-- 内容 -->
+                            </div>
+                            <div
+                                class="mt-6 p-4 bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg border border-blue-300 shadow-inner">
+                                <!-- 强调声明 -->
+                                <p class="text-blue-800 text-center font-semibold"> <!-- 文本 -->
+                                    <i class="fas fa-exclamation-circle mr-2"></i> <!-- 警告图标 -->
+                                    使用本程序即视为同意本免责声明的所有条款。如果使用者不同意本免责声明的任何条款，请立即停止使用本程序。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="py-8 mt-12 border-t border-blue-400/30"> <!-- 页脚区域 -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <!-- 居中容器 -->
+            <div
+                class="bg-black/40 backdrop-filter backdrop-blur-md rounded-xl p-8 border border-blue-400/20 shadow-xl dark-theme-only">
+                <!-- 深色主题页脚 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"> <!-- 网格布局 -->
+                    <div class="text-center"> <!-- 版权信息 -->
+                        <div
+                            class="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-green-900/50 to-green-800/30 border border-green-700/30 glow">
+                            <!-- 容器 -->
+                            <span class="text-green-400 mr-2">Copyright</span> <!-- 文本 -->
+                            <a href="https://ixingchen.org.cn/" target="_self" class="text-green-300 hover:text-white">
+                                <!-- 链接 -->
+                                ©2025 iixingchen
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center"> <!-- 技术支持信息 -->
+                        <div
+                            class="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-blue-900/50 to-blue-800/30 border border-blue-700/30 glow">
+                            <!-- 容器 -->
+                            <span class="text-blue-400 mr-2">Powered By</span> <!-- 文本 -->
+                            <a href="https://dash.cloudflare.com" target="_blank"
+                                class="text-blue-300 hover:text-white"> <!-- 链接 -->
+                                CloudFlare
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center"> <!-- 推荐码信息 -->
+                        <div
+                            class="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-purple-900/50 to-purple-800/30 border border-purple-700/30 glow">
+                            <!-- 容器 -->
+                            <span class="text-purple-400 mr-2">凌霞推荐码</span> <!-- 文本 -->
+                            <a href="https://www.lxware.cn/?code=vip888" target="_self"
+                                class="text-purple-300 hover:text-white"> <!-- 链接 -->
+                                vip888
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center mb-6 space-x-8"> <!-- 社交链接 -->
+                    <a href="https://github.com/520svip/docker-hub-npm" target="_blank"
+                        class="flex items-center text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                        <!-- GitHub 链接 -->
+                        <i class="fab fa-github text-xl mr-2"></i> <!-- 图标 -->
+                        <span>GitHub</span> <!-- 文本 -->
+                    </a>
+                    <a href="https://gitee.com/svip520/docker-hub-npm" target="_blank"
+                        class="flex items-center text-gray-300 hover:text-blue-400 transition-colors duration-200">
+                        <!-- Gitee 链接 -->
+                        <i class="fab fa-git-alt text-xl mr-2"></i> <!-- 图标 -->
+                        <span>Gitee</span> <!-- 文本 -->
+                    </a>
+                </div>
+                <div class="flex flex-col items-center"> <!-- 统计信息 -->
+                    <div id="51la" class="mb-4"> <!-- 51la 统计组件 -->
+                        <script id="LA-DATA-WIDGET" crossorigin="anonymous" charset="UTF-8" src=""></script>
+                    </div>
+                    <div id="cf" class="text-sm text-blue-300 mb-2 bg-black/30 px-4 py-2 rounded-lg"></div>
+                    <!-- Cloudflare 信息 -->
+                    <div id="busuanzi_container_site_pv" class="text-sm text-blue-300 mt-2"> <!-- 访问统计 -->
+                        <span id="busuanzi_value_site_pv" class="font-semibold"></span> 次总访问 | <!-- 总访问量 -->
+                        <span id="busuanzi_value_site_uv" class="font-semibold"></span> 位访客 <!-- 独立访客 -->
+                    </div>
+                </div>
+            </div>
+            <!-- 亮色主题页脚 -->
+            <div
+                class="bg-white/80 backdrop-filter backdrop-blur-md rounded-xl p-8 border border-blue-200 shadow-xl light-theme-only hidden">
+                <!-- 亮色主题页脚，默认隐藏 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"> <!-- 网格布局 -->
+                    <div class="text-center"> <!-- 版权信息 -->
+                        <div
+                            class="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-green-50 to-green-100 border border-green-300 shadow-md">
+                            <!-- 容器 -->
+                            <span class="text-green-600 mr-2">Copyright</span> <!-- 文本 -->
+                            <a href="https://ixingchen.org.cn/" target="_self"
+                                class="text-green-700 hover:text-green-800">
+                                <!-- 链接 -->
+                                ©2025 iixingchen
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center"> <!-- 技术支持信息 -->
+                        <div
+                            class="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-300 shadow-md">
+                            <!-- 容器 -->
+                            <span class="text-blue-600 mr-2">Powered By</span> <!-- 文本 -->
+                            <a href="https://dash.cloudflare.com" target="_blank"
+                                class="text-blue-700 hover:text-blue-800"> <!-- 链接 -->
+                                CloudFlare
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-center"> <!-- 推荐码信息 -->
+                        <div
+                            class="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-purple-50 to-purple-100 border border-purple-300 shadow-md">
+                            <!-- 容器 -->
+                            <span class="text-purple-600 mr-2">凌霞推荐码</span> <!-- 文本 -->
+                            <a href="https://www.lxware.cn/?code=vip888" target="_self"
+                                class="text-purple-700 hover:text-purple-800"> <!-- 链接 -->
+                                vip888
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center mb-6 space-x-8"> <!-- 社交链接 -->
+                    <a href="https://github.com/520svip/docker-hub-npm" target="_blank"
+                        class="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                        <!-- GitHub 链接 -->
+                        <i class="fab fa-github text-xl mr-2"></i> <!-- 图标 -->
+                        <span>GitHub</span> <!-- 文本 -->
+                    </a>
+                    <a href="https://gitee.com/svip520/docker-hub-npm" target="_blank"
+                        class="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                        <!-- Gitee 链接 -->
+                        <i class="fab fa-git-alt text-xl mr-2"></i> <!-- 图标 -->
+                        <span>Gitee</span> <!-- 文本 -->
+                    </a>
+                </div>
+                <div class="flex flex-col items-center"> <!-- 统计信息 -->
+                    <div id="51la-light" class="mb-4"> <!-- 51la 统计组件 -->
+                        <script id="LA-DATA-WIDGET-LIGHT" crossorigin="anonymous" charset="UTF-8" src=""></script>
+                    </div>
+                    <div id="cf-light" class="text-sm text-blue-600 mb-2 bg-blue-50 px-4 py-2 rounded-lg"></div>
+                    <!-- Cloudflare 信息 -->
+                    <div id="busuanzi_container_site_pv_light" class="text-sm text-blue-600 mt-2"> <!-- 访问统计 -->
+                        <span id="busuanzi_value_site_pv_light" class="font-semibold"></span> 次总访问 | <!-- 总访问量 -->
+                        <span id="busuanzi_value_site_uv_light" class="font-semibold"></span> 位访客 <!-- 独立访客 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <div id="back-to-top" class="back-to-top" onclick="scrollToTop()"> <!-- 返回顶部按钮 -->
+        <i class="fas fa-arrow-up"></i> <!-- 向上箭头图标 -->
+    </div>
+
+    <!-- 外部脚本 -->
+    <!-- 注意: 访问统计功能已禁用，因为它可能被广告拦截器阻止 -->
+    <!-- 如需启用访问统计，请考虑以下方案之一:
+    1. 将统计脚本本地托管: 下载 busuanzi.pure.mini.js 并放在 assets/js/ 目录下
+    2. 使用其他统计服务如 Google Analytics 或百度统计
+    3. 自行实现简单的访问计数器 -->
+    <!-- <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+    <script src="assets/js/scripts.js"></script> <!-- 引入外部 JavaScript 文件 -->
+</body>
+
+</html>
